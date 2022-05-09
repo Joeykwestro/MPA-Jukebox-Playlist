@@ -1,8 +1,35 @@
-﻿@{
+﻿@using System.Data
+@{
+
     ViewData["Title"] = "Home Page";
+
+    string stringquery = $@"use MPA_Jukebox_Playlist; select Type from Genres;";
+    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div id="allContainer">
+    <div id="headerContainer">
+        <h1>MPA_Jukebox_Playlist</h1>
+        <button onclick="">Create your own account now.</button>
+    </div>
+    <div id="MainContainer">
+        <h2>Genres:</h2>
+        
+            @foreach(DataRow row in dt.Rows)
+            {
+
+                {
+                    <div style="border: 2px solid black; height: 50px; width: 200px; margin: 10px; text-align: center;">
+
+                    <button style="background-color: white; border: 2px solid black; height: 50px; width: 199px;">@row["Type"].ToString()</button>
+                    
+                 </div> }
+
+            }
+
+    </div>
+    <div id="footerContainer">
+        <footer id="footer">© - Joey Kwestro - 2022</footer>
+    </div>
 </div>

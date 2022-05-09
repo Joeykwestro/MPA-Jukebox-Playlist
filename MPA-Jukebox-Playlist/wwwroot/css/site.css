@@ -16,3 +16,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#allContainer{
+
+}
+
+#headerContainer{
+    width: auto;
+    height: 100px;
+    background-color: lightgrey;
+    text-align: center;
+}
+
+#mainContainer{
+
+}
+
+#footerContainer{
+
+}
