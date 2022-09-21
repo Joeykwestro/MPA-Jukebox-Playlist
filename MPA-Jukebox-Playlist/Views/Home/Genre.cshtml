@@ -1,0 +1,15 @@
+﻿@using System.Data
+@{
+    string stringquery = $@"select * from Genres";
+    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+}
+
+<div>
+    @foreach(DataRow dr in dt.Rows)
+    {
+        <div id="GenreDiv">
+            <h2>@dr["Type"]</h2>
+            <button onclick="GoToSongsGenre(@dr["ID"])" id="btnGenre">Go To Genre</button>
+        </div>
+    }
+</div>

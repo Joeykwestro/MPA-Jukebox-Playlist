@@ -1,35 +1,32 @@
 ﻿@using System.Data
 @{
-
     ViewData["Title"] = "Home Page";
 
-    string stringquery = $@"use MPA_Jukebox_Playlist; select Type from Genres;";
+    string stringquery = $@"use MPA_Jukebox_Playlist; select * from Users;";
     DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
+    int cnt = 1;
 
 }
 
 <div id="allContainer">
     <div id="headerContainer">
         <h1>MPA_Jukebox_Playlist</h1>
-        <button onclick="">Create your own account now.</button>
+        <h3>Create your own account now.</h3>
     </div>
     <div id="MainContainer">
-        <h2>Genres:</h2>
-        
-            @foreach(DataRow row in dt.Rows)
-            {
-
-                {
-                    <div style="border: 2px solid black; height: 50px; width: 200px; margin: 10px; text-align: center;">
-
-                    <button style="background-color: white; border: 2px solid black; height: 50px; width: 199px;">@row["Type"].ToString()</button>
-                    
-                 </div> }
-
-            }
+    
+        <h1>Login:</h1>
+        @foreach (DataRow dr in dt.Rows)
+        {
+            <div>
+                <h2>@dr["Username"]</h2>
+                <button onclick="LoginToUser(@dr["ID"])" id="btnLogin">Log In</button>
+            </div>
+        }
 
     </div>
     <div id="footerContainer">
-        <footer id="footer">© - Joey Kwestro - 2022</footer>
+        <footer id="footer">© - Joey_Kwestro - 2022</footer>
     </div>
 </div>

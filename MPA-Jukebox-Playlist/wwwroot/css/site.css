@@ -28,10 +28,10 @@ body {
     text-align: center;
 }
 
-#mainContainer{
-
-}
-
-#footerContainer{
-
+#GenreDiv{
+    border: 1px solid black;
+    height: 30%;
+    width: 20%;
+    margin: 20px;
+    padding: 10px;
 }
