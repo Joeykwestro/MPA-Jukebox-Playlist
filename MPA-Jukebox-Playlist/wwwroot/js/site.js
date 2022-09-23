@@ -16,7 +16,20 @@ function GoToSongsGenre(ID) {
     $.ajax({
         type: "Post",
         dataType: "Json",
-        url: '/Home/GoToSongsGenres',
+        url: '/Home/GoToGenres',
+        data: JSON.stringify(ID),
+        contentType: "application/json",
+        success: function () { console.log(1); },
+        Error: function (a, b, c) { console.log(a); console.log(b); console.log(c); }
+    });
+}
+
+function AddToQueue(ID) {
+
+    $.ajax({
+        type: "Post",
+        dataType: "Json",
+        url: '/Queue/AddtoQueue',
         data: JSON.stringify(ID),
         contentType: "application/json",
         success: function () { console.log(1); },
@@ -29,7 +42,7 @@ function GoToCreate() {
     $.ajax({
         type: "Post",
         dataType: "Json",
-        url: '/Home/toCreate',
+        url: '/User/toCreate',
         data: JSON.stringify(null),
         contentType: "application/json",
         success: function () { console.log(1); },
@@ -42,8 +55,8 @@ function LoginToUser(ID) {
     $.ajax({
         type: "Post",
         dataType: "Json",
-        url: '/Home/ToLogin',
-        data: JSON.stringify(null),
+        url: '/User/ToLogin',
+        data: JSON.stringify(ID),
         contentType: "application/json",
         success: function () { console.log(1); },
         Error: function (a, b, c) { console.log(a); console.log(b); console.log(c); },

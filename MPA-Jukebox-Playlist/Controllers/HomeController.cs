@@ -12,7 +12,6 @@ namespace MPA_Jukebox_Playlist.Controllers
 
     public class HomeController : Controller
     {
-        public string Username;
         public int GenreID;
 
         private readonly ILogger<HomeController> _logger;
@@ -23,27 +22,77 @@ namespace MPA_Jukebox_Playlist.Controllers
         }
 
         public IActionResult Index()
-        {
+        {           
             var sessionUser = HttpContext.Session.GetString("User");
 
-            var user = JsonConvert.DeserializeObject(sessionUser);
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
 
-            ViewBag.user = user;
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "Login";
+            }
+
             return View("Index");
         }
 
+        [ResponseCache(Duration = 1000, Location = ResponseCacheLocation.None, NoStore = false)]
+
+
         public IActionResult Login()
         {
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "Login";
+            }
+
             return View("Login");
         }
 
         public IActionResult Create()
         {
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "Login";
+            }
+
             return View("Create");
         }
 
         public IActionResult Genre()
         {
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "Login";
+            }
+
             return View("Genre");
         }
     
@@ -71,34 +120,22 @@ namespace MPA_Jukebox_Playlist.Controllers
             return View("Index");
         }
 
-        public IActionResult toCreate([FromBody] string nothing)
+
+
+        public IActionResult GoToGenre([FromBody] string name )
         {
 
-            return View("Create");
+            HttpContext.Session.SetString("Genre", JsonConvert.SerializeObject(name));
 
-        }
 
-        public IActionResult ToGenre([FromBody] int ID)
-        {
+            ViewBag.GenreType = name;
 
-            return View("Genre");
+
+            return View("Songs");
 
         }
         
-        [HttpPost]
-        public int ToLogin([FromBody] int ID)
-        {
-            string stringquery = $@"select Username from Users where ID = {ID + 1}";
-            Username = MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT");
 
-            HttpContext.Session.SetString("User", JsonConvert.SerializeObject(Username));
-
-
-            ViewBag.username = Username;
-
-
-            return ID;
-        }
 
         public ActionResult form2(string txtUsername, string txtPassword, string txtpassword2)
         {
