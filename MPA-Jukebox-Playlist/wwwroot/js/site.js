@@ -16,7 +16,7 @@ function GoToSongsGenre(ID) {
     $.ajax({
         type: "Post",
         dataType: "Json",
-        url: '/Home/GoToGenres',
+        url: '/Home/GoToGenre',
         data: JSON.stringify(ID),
         contentType: "application/json",
         success: function () { console.log(1); },
