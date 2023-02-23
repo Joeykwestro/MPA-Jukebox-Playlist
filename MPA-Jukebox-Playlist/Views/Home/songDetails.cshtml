@@ -1,0 +1,21 @@
+﻿@using System.Data;
+
+@{
+
+    int id = ViewBag.detailsID;
+
+    string stringquery = $@"select * from Songs inner join Genres on Songs.GenreID = Genres.ID where Songs.ID = {id}";
+    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
+}
+
+@foreach (DataRow dr in dt.Rows)
+{
+<a asp-area="" asp-controller="Home" asp-action="Songs" asp-route-id="@dr["GenreID"]">Back</a>
+<div>
+    <h2>@dr["Title"]</h2>
+    <p>@dr["Artist"]</p>
+    <p>@dr["Type"]</p>
+    <p>@dr["Duration"]</p>
+</div>
+}

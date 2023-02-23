@@ -1,8 +1,7 @@
 ﻿@using System.Data
 @{
 
-    int GenreID = Int32.Parse(MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql($@"Select ID from Genre where Type = '{ViewBag.GenreType}'", "MPA_Jukebox_Playlist", "SELECT"));
-
+    int GenreID = ViewBag.GenreType;
     string stringquery = $@"select * from Songs where GenreID = {GenreID}";
 
     DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
@@ -10,12 +9,15 @@
 }
 
 <div>
+    <a asp-area="" asp-controller="Home" asp-action="Genre">Back</a>
+
     @foreach (DataRow dr in dt.Rows)
     {
         <div>
             <h1>@dr["Title"]</h1>
-            <p>@dr["Artist"]</p>
-            <button onclick="AddToQueue(@dr["ID"])" id="btnAddToQueue">Add to queue</button>
+            <a asp-area="" asp-controller="Home" asp-action="AddtoQueue" asp-route-id="@dr["ID"]">Add to queue</a>
+            <a asp-area="" asp-controller="Home" asp-action="songsDetails" asp-route-id="@dr["ID"]">Details</a>
+
         </div>
     }
 </div>

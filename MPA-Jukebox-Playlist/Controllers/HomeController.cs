@@ -12,14 +12,15 @@ namespace MPA_Jukebox_Playlist.Controllers
 
     public class HomeController : Controller
     {
-        public int GenreID;
-
+        public bool login = false;
+        List<string> queuelist = new List<string>();
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
+
 
         public IActionResult Index()
         {           
@@ -33,7 +34,7 @@ namespace MPA_Jukebox_Playlist.Controllers
             }
             else
             {
-                ViewBag.user = "Login";
+                ViewBag.user = "";
             }
 
             return View("Index");
@@ -54,11 +55,13 @@ namespace MPA_Jukebox_Playlist.Controllers
             }
             else
             {
-                ViewBag.user = "Login";
+                ViewBag.user = "";
             }
 
             return View("Login");
         }
+
+
 
         public IActionResult Create()
         {
@@ -72,7 +75,7 @@ namespace MPA_Jukebox_Playlist.Controllers
             }
             else
             {
-                ViewBag.user = "Login";
+                ViewBag.user = "";
             }
 
             return View("Create");
@@ -90,12 +93,57 @@ namespace MPA_Jukebox_Playlist.Controllers
             }
             else
             {
-                ViewBag.user = "Login";
+                ViewBag.user = "";
             }
 
             return View("Genre");
         }
-    
+
+        [Route("Songs/{id}")]
+        public IActionResult Songs(int id)
+        {
+            ViewBag.GenreType = id;
+
+
+            return View("Songs");
+        }
+
+
+        public IActionResult Queue()
+        {
+
+            queuelist.Add(HttpContext.Session.GetString("Queue"));
+
+            if (queuelist != null)
+            {
+                ViewData["queuearray"] = (JsonConvert.DeserializeObject(queuelist.ToString()));
+
+            }
+
+
+            return View("Queue");
+        }
+
+
+        [Route("AddtoQueue/{id}")]
+        public IActionResult AddtoQueue(int ID)
+        {
+            string Song = MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql($@"select Title from Songs where ID = {ID}", "MPA_Jukebox_Playlist", "SELECT");
+
+            HttpContext.Session.SetString("Queue", JsonConvert.SerializeObject(Song));
+
+            return View("Index");
+        }
+
+
+        [Route("songsDetails/{id}")]
+        public IActionResult songsDetails(int id)
+        {
+            ViewBag.detailsID = id;
+
+            return View("songDetails");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -109,26 +157,35 @@ namespace MPA_Jukebox_Playlist.Controllers
         [HttpPost]
         public ActionResult form1(string txtUsername, string txtPassword)
         {
-            ViewBag.Username = txtUsername;
-            ViewBag.Password = txtPassword;
 
-            Console.WriteLine(txtUsername);
-            Console.WriteLine(txtPassword);
+            string stringquery = $@"select Count(*) from Users where Username = '{txtUsername}' and Password = '{txtPassword}'";
 
+            int amount = Int32.Parse(MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
 
+            if (amount > 0)
+            {
+                ViewBag.User = txtUsername;
+                ViewBag.Password = txtPassword;
 
-            return View("Index");
+                HttpContext.Session.SetString("User", JsonConvert.SerializeObject(txtUsername));
+                login = true;
+                return View("Index", true);
+
+            }
+            else
+            {
+                return View(false);
+            }
+
+            
         }
 
 
+        [Route("GoToGenre/{id}")]
+        public IActionResult GoToGenre(int id)
+        { 
 
-        public IActionResult GoToGenre([FromBody] string name )
-        {
-
-            HttpContext.Session.SetString("Genre", JsonConvert.SerializeObject(name));
-
-
-            ViewBag.GenreType = name;
+            ViewBag.GenreType = id;
 
 
             return View("Songs");
@@ -139,9 +196,6 @@ namespace MPA_Jukebox_Playlist.Controllers
 
         public ActionResult form2(string txtUsername, string txtPassword, string txtpassword2)
         {
-            ViewBag.Username = txtUsername;
-            ViewBag.Password = txtPassword;
-            ViewBag.Password2 = txtpassword2;
 
             if (txtPassword == txtpassword2)
             {
@@ -164,11 +218,7 @@ namespace MPA_Jukebox_Playlist.Controllers
                 return View("Create", false);
             }
 
-
-            Console.WriteLine(txtUsername);
-            Console.WriteLine(txtPassword);
-
-            return View("Index");
+            return View("Login");
         }
 
     }

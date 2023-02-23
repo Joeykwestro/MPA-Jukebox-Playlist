@@ -49,17 +49,3 @@ function GoToCreate() {
         Error: function (a, b, c) { console.log(a); console.log(b); console.log(c); }
     });
 }
-
-function LoginToUser(ID) {
-
-    $.ajax({
-        type: "Post",
-        dataType: "Json",
-        url: '/User/ToLogin',
-        data: JSON.stringify(ID),
-        contentType: "application/json",
-        success: function () { console.log(1); },
-        Error: function (a, b, c) { console.log(a); console.log(b); console.log(c); },
-        complete: function () { location.reload(); }
-    });
-}

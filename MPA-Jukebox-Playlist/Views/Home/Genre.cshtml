@@ -5,11 +5,14 @@
 }
 
 <div>
+    <a asp-area="" asp-controller="Home" asp-action="Index">Back</a>
+
     @foreach(DataRow dr in dt.Rows)
     {
         <div id="GenreDiv">
             <h2>@dr["Type"]</h2>
-            <button onclick="GoToSongsGenre(@dr["Type"])" id="btnGenre">Go To Genre</button>
+            <a asp-area="" asp-controller="Home" asp-action="GoToGenre" asp-route-id="@dr["ID"]">Songs</a>
+
         </div>
     }
 </div>

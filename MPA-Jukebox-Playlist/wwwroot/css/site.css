@@ -35,3 +35,11 @@ body {
     margin: 20px;
     padding: 10px;
 }
+
+.btnLogin{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    margin: 100px;
+    padding: 5px;
+}
