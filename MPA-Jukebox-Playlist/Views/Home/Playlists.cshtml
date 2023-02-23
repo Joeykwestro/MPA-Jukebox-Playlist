@@ -2,9 +2,24 @@
 @{
     string user = ViewBag.User;
 
-    string stringqry = $@"selecct [ID] from Users where Username = '{user}'";
+    string stringqry = $@"select [ID] from [Users] where [Username] = '{user}'";
     var id = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT");
 
-    string stringquery = $@"select * from [Playlists] inner join [Saved_Songs] on [Playlists].[SongsID] = [Saved_Songs].[PlaylistID] where [Playlists].[UserID] = {id}";
+    string stringquery = $@"select * from [Playlists] where [UserID] = {id}";
     DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
 }
+
+<div>
+    <a asp-area="" asp-controller="Home" asp-action="AddPlaylist">Add Playlist</a><br/>
+
+    @foreach (DataRow dr in dt.Rows)
+    {
+        <div style="padding: 20px;margin: 0 auto; display: inline-block; border: 1px; border-style: solid;">
+            <h1>@dr["Title"]</h1>
+            <a asp-area="" asp-controller="Home" asp-action="PlaylistSongs" asp-route-id="@dr["ID"]">View</a>
+            <a asp-area="" asp-controller="Home" asp-action="DeletePlaylist" asp-route-id="@dr["ID"]">Delete</a>
+
+        </div>
+    }
+</div>

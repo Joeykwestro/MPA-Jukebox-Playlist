@@ -5,13 +5,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = "JukeboxPlaylist";
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
-    //options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+builder.Services.AddSession();
 
 var app = builder.Build();
 

@@ -1,25 +1,16 @@
 ﻿@using System.Data
 @{
     DataTable dt = new DataTable();
-    string[] queueSongs = ViewBag.queueArray;
-    if(queueSongs != null)
-    {
-        foreach (var item in queueSongs)
-        {
-            string stringquery = $@"select [Title] from Songs where ID = {item}";
-            DataRow[] dr = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist").Select();
-            dt.Rows.Add(dr);
-        }
-    }
+    List<string> queueSongs = ViewBag.Queue;
 
 }
 
 
 <div>
-    @foreach (DataRow dr2 in dt.Rows)
+    @foreach (var song in queueSongs)
     {
         <div>
-            <h2>@dr2["Title"]</h2>
+            <h2>@song</h2>
         </div>
     }
 </div>
