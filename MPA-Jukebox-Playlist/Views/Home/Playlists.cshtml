@@ -1,0 +1,10 @@
+﻿@using System.Data;
+@{
+    string user = ViewBag.User;
+
+    string stringqry = $@"selecct [ID] from Users where Username = '{user}'";
+    var id = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT");
+
+    string stringquery = $@"select * from [Playlists] inner join [Saved_Songs] on [Playlists].[SongsID] = [Saved_Songs].[PlaylistID] where [Playlists].[UserID] = {id}";
+    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+}

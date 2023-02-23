@@ -99,6 +99,26 @@ namespace MPA_Jukebox_Playlist.Controllers
             return View("Genre");
         }
 
+
+        public IActionResult Playlists()
+        {
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "";
+            }
+
+            return View("Playlists");
+        }
+
+
         [Route("Songs/{id}")]
         public IActionResult Songs(int id)
         {
@@ -116,7 +136,7 @@ namespace MPA_Jukebox_Playlist.Controllers
 
             if (queuelist != null)
             {
-                ViewData["queuearray"] = (JsonConvert.DeserializeObject(queuelist.ToString()));
+                ViewBag.Queue = (JsonConvert.DeserializeObject(queuelist.ToString()));
 
             }
 
