@@ -1,16 +1,21 @@
 ﻿@using System.Data
 @{
     DataTable dt = new DataTable();
-    List<string> queueSongs = ViewBag.Queue;
-
+    var queueSongs = ViewBag.Queue;
 }
 
 
 <div>
-    @foreach (var song in queueSongs)
+    @if (queueSongs != null)
     {
-        <div>
-            <h2>@song</h2>
-        </div>
+        @foreach (var song in queueSongs)
+        {
+
+
+            <div>
+                <h2>@song</h2>
+            </div>
+        }
+
     }
 </div>

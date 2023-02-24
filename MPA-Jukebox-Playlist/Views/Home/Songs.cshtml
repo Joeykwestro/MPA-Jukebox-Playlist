@@ -15,8 +15,8 @@
     {
         <div>
             <h1>@dr["Title"]</h1>
-            <a asp-area="" asp-controller="Home" asp-action="AddtoQueue" asp-route-id="@dr["ID"]">Add to queue</a>
-            <a asp-area="" asp-controller="Home" asp-action="songsDetails" asp-route-id="@dr["ID"]">Details</a>
+            <a asp-area="" asp-controller="Queue" asp-action="AddtoQueue" asp-route-id="@dr["ID"]">Add to queue</a>
+            <a asp-area="" asp-controller="Playlist" asp-action="songsDetails" asp-route-id="@dr["ID"]">Details</a>
 
         </div>
     }

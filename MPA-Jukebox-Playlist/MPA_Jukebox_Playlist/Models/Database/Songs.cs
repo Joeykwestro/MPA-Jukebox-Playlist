@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models
+﻿namespace MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database
 {
-    public partial class Song
+    public class Songs
     {
 
         public int ID { get; set; }
@@ -11,5 +8,7 @@ namespace MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models
         public string Artist { get; set; }
         public int GenreID { get; set; }
         public int Duration { get; set; }
+
+
     }
 }

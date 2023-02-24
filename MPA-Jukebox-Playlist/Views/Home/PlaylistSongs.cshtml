@@ -30,7 +30,7 @@ where [Playlists].[ID] = {id}";
             <p>Artist: @dr["Artist"]</p>
             <p>@dr["Duration"] min</p>
             <p>Genre: @dr["Type"]</p>
-            <a asp-area="" asp-controller="Home" asp-action="DeleteSongPlaylist" asp-route-id="@dr["ID"]">Delete</a>
+            <a asp-area="" asp-controller="Playlist" asp-action="DeleteSongPlaylist" asp-route-id="@dr["ID"]">Delete</a>
         </div>
     } 
 </div>

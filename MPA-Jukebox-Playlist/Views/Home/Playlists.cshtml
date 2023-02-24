@@ -11,14 +11,14 @@
 }
 
 <div>
-    <a asp-area="" asp-controller="Home" asp-action="AddPlaylist">Add Playlist</a><br/>
+    <a asp-area="" asp-controller="Playlist" asp-action="AddPlaylist">Add Playlist</a><br/>
 
     @foreach (DataRow dr in dt.Rows)
     {
         <div style="padding: 20px;margin: 0 auto; display: inline-block; border: 1px; border-style: solid;">
             <h1>@dr["Title"]</h1>
-            <a asp-area="" asp-controller="Home" asp-action="PlaylistSongs" asp-route-id="@dr["ID"]">View</a>
-            <a asp-area="" asp-controller="Home" asp-action="DeletePlaylist" asp-route-id="@dr["ID"]">Delete</a>
+            <a asp-area="" asp-controller="Playlist" asp-action="PlaylistSongs" asp-route-id="@dr["ID"]">View</a>
+            <a asp-area="" asp-controller="Playlist" asp-action="DeletePlaylist" asp-route-id="@dr["ID"]">Delete</a>
 
         </div>
     }
