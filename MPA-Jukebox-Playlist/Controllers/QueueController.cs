@@ -4,7 +4,7 @@ using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models;
 using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database;
 using Newtonsoft.Json;
 using System.Data;
-using System.Linq;
+using System.Xml.Linq;
 
 namespace MPA_Jukebox_Playlist.Controllers
 {
@@ -18,6 +18,7 @@ namespace MPA_Jukebox_Playlist.Controllers
         {
             _logger = logger;
             _context = context;
+            songslist = new List<Songs>();
         }
 
         
@@ -47,7 +48,7 @@ namespace MPA_Jukebox_Playlist.Controllers
                 {
                     songslist.Add(song);
                 }
-            }
+            }  
 
             dbSong = _context.Songs.Where(e => e.ID == id).ToList();
 

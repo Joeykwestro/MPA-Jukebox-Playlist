@@ -43,3 +43,7 @@ body {
     margin: 100px;
     padding: 5px;
 }
+
+#QueueSongID{
+    border: 1px solid;
+}
