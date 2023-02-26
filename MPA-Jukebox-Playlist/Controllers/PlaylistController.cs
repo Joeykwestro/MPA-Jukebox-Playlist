@@ -1,10 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace MPA_Jukebox_Playlist.Controllers
 {
     public class PlaylistController : Controller
     {
+        public List<Song> queue = new List<Song>();
+
+        [Route("AddtoPlaylist/{id}")]
+        public IActionResult AddtoPlaylist(int id)
+        {
+            ViewBag.AddToPlaylistID = id;
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "";
+                return View("../Home/Login");
+            }
+
+
+            return View("../Home/SelectPlaylist");
+        }
+
 
 
         [Route("songsDetails/{id}")]
@@ -25,7 +51,7 @@ namespace MPA_Jukebox_Playlist.Controllers
 
             ViewBag.detailsID = id;
 
-            return View("songDetails");
+            return View("../Home/songDetails");
         }
 
         public IActionResult AddPlaylist()
@@ -123,6 +149,80 @@ namespace MPA_Jukebox_Playlist.Controllers
             return View("../Home/Playlists");
         }
 
+
+        public IActionResult AddQueuetoPlaylist()
+        {
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+
+                ViewBag.user = user;
+            }
+            else
+            {
+                ViewBag.user = "";
+                return View("../Home/Login");
+
+            }
+
+            return View("../Home/PlaylistName");
+        }
+
+        public ActionResult form5(string txtAddPlaylist)
+        {
+            var sessionUser = HttpContext.Session.GetString("User");
+
+            if (sessionUser != null)
+            {
+                var user = JsonConvert.DeserializeObject(sessionUser);
+                var queuelist = HttpContext.Session.GetString("queue");
+
+                if (queuelist != null)
+                {
+                    queue = JsonConvert.DeserializeObject<List<Song>>(queuelist);
+                    try
+                    {
+                        string stringquery = $@"insert into [Playlists] (UserID, Title) values ((select [ID] from Users where Username = '{user}'), '{txtAddPlaylist}')";
+                        MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "INSERT");
+                        foreach (var song in queue)
+                        {
+
+                            string stringqry = $@"insert into [Saved_Songs] (PlaylistID, SongID) values ((select [ID] from [Playlists] where [UserID] = (select ID from [Users] where Username = '{user}') and Title = '{txtAddPlaylist}'), {song.ID})";
+                            MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "INSERT");
+
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        return View("../Home/Index");
+
+                        throw;
+                    }
+
+                }
+            }
+            else
+            {
+                return View("../Home/Login");
+
+            }
+
+            return View("../Home/Index");
+        }
+
+
+        public ActionResult form4(string txtTitle, int txtSongID)
+        {
+
+            string stringquery = $@"insert into Saved_Songs (PlaylistID, SongID) values ((select ID from Playlists where Title = '{txtTitle}'), {txtSongID})";
+            MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "INSERT");
+
+
+
+            return View("../Home/Index");
+        }
 
         public ActionResult form3(string txtAddPlaylist)
         {

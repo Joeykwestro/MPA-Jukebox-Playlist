@@ -1,0 +1,28 @@
+﻿@using System.Data
+@{
+    var songid = ViewBag.AddToPlaylistID;
+    var username = ViewBag.user;
+    string stringqry = $@"select [ID] from Users where [Username] = '{username}'";
+    int userid = Int32.Parse(MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+
+    string stringquery = $@"Select [Title] from [Playlists] where [UserID] = {userid}";
+    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
+}
+
+<div>
+
+<form action="../Playlist/form4" method="post">
+    <input style="display:none;" type="number" name="txtSongID" value="@songid" />
+    <fieldset>
+
+        <select id="orderby" name="txtTitle">
+        @foreach (DataRow dr in dt.Rows)
+        {
+            <option value="@dr["Title"]">@dr["Title"]</option>
+        }
+        </select>
+        <td colspan="2"><input type="submit" value="Add To Playlist" /></td>
+    </fieldset>
+</form>
+</div>

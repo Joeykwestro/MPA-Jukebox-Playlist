@@ -65,7 +65,7 @@ namespace MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database
 
                 entity.Property(e => e.Username).HasColumnName("Username");
 
-                entity.Property(e => e.Password).HasColumnName("Duration");
+                entity.Property(e => e.Password).HasColumnName("Password");
             });
 
             OnModelCreatingPartial(modelBuilder);

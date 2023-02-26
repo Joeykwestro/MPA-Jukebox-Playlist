@@ -9,8 +9,9 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession();
 
-builder.Services.AddDbContextPool<MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database.MpaContext>(options => options.UseSqlServer("Data Source = LAPTOP-HGAMMLG8; Initial Catalog = MPA_Jukebox_Playlist; Integrated Security = True"));
-
+builder.Services.AddDbContextPool<MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database.MpaContext>(options => options.UseSqlServer("Data Source = DESKTOP-9U8RPTR; Initial Catalog = MPA_Jukebox_Playlist; Integrated Security = True"));
+//LAPTOP-HGAMMLG8
+//DESKTOP-9U8RPTR
 
 var app = builder.Build();
 

@@ -2,10 +2,13 @@
 @{
     DataTable dt = new DataTable();
     var queueSongs = ViewBag.Queue;
+    int cnt = 0;
 }
 
 
 <div>
+        <a asp-area="" asp-controller="Home" asp-action="Index">Back</a>
+
     @if (queueSongs != null)
     {
         @foreach (var song in queueSongs)
@@ -14,8 +17,16 @@
 
             <div id="QueueSongID">
                 <h2>@song["Title"]</h2>
+                <p>@song["Artist"]</p>
+                <p>@song["Duration"] min</p>
+                <a asp-area="" asp-controller="Playlist" asp-action="AddtoPlaylist" asp-route-id="@song["ID"]">Add to Playlist</a>
+                <a asp-area="" asp-controller="Queue" asp-action="DeleteFromQueue" asp-route-id="@song["ID"]">Delete from queue</a>
+
             </div>
+            cnt = cnt + (int)song["Duration"];
         }
+        <p>Total: @cnt min</p>
+        <a asp-area="" asp-controller="Playlist" asp-action="AddQueuetoPlaylist">Add Queue to Playlist</a>
 
     }
 </div>

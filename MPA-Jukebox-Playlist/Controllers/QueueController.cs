@@ -40,7 +40,6 @@ namespace MPA_Jukebox_Playlist.Controllers
 
                 oldQueue = newSong;
 
-                    
             }
             if (oldQueue != null)
             {
@@ -58,6 +57,37 @@ namespace MPA_Jukebox_Playlist.Controllers
 
 
             return View("../Home/Index");
+        }
+
+        [Route("DeleteFromQueue/{id}")]
+        public IActionResult DeleteFromQueue(int id)
+        {
+
+            List<Songs> queue;
+            List<Songs> dbSong;
+            List<Songs> dbQueue;
+
+            queue = null;
+
+            var queuelist = HttpContext.Session.GetString("queue");
+
+            queue = JsonConvert.DeserializeObject<List<Songs>>(queuelist);
+
+            foreach (var item in queue)
+            {
+                if (item.ID == id)
+                {
+                    queue.Remove(item);
+                    break;
+
+                }
+            }
+
+
+            HttpContext.Session.SetString("queue", JsonConvert.SerializeObject(queue));
+
+            return View("../Home/Index");
+
         }
 
     }

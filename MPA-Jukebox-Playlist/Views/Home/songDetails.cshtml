@@ -12,10 +12,10 @@
 @foreach (DataRow dr in dt.Rows)
 {
 <a asp-area="" asp-controller="Home" asp-action="Songs" asp-route-id="@dr["GenreID"]">Back</a>
-<div>
+<div id="SongDetailsContainer">
     <h2>@dr["Title"]</h2>
-    <p>@dr["Artist"]</p>
-    <p>@dr["Type"]</p>
-    <p>@dr["Duration"]</p>
+    <p>Artist: @dr["Artist"]</p>
+    <p>Genre: @dr["Type"]</p>
+    <p>Duration: @dr["Duration"] min</p>
 </div>
 }

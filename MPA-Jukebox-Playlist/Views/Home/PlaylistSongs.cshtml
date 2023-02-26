@@ -22,6 +22,8 @@ where [Playlists].[ID] = {id}";
 }
 
 <div>
+        <a asp-area="" asp-controller="Home" asp-action="Playlists">Back</a><br />
+
         <p>Total Duration: @cnt min</p><br />
     @foreach (DataRow dr in dt.Rows)
     {
