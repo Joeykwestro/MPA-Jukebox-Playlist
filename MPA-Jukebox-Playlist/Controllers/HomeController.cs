@@ -22,9 +22,7 @@ namespace MPA_Jukebox_Playlist.Controllers
 
         }
 
-
-
-        public IActionResult Index()
+        public string getUser()
         {
             var sessionUser = HttpContext.Session.GetString("User");
 
@@ -32,12 +30,19 @@ namespace MPA_Jukebox_Playlist.Controllers
             {
                 var user = JsonConvert.DeserializeObject(sessionUser);
 
-                ViewBag.user = user;
+                return user.ToString();
             }
             else
             {
-                ViewBag.user = "";
+                return "";
             }
+        }
+
+
+
+        public IActionResult Index()
+        {
+            ViewBag.user = getUser();
 
             return View("Index");
         }
@@ -47,18 +52,8 @@ namespace MPA_Jukebox_Playlist.Controllers
 
         public IActionResult Login()
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
 
             return View("Login");
         }
@@ -66,36 +61,18 @@ namespace MPA_Jukebox_Playlist.Controllers
 
         public IActionResult Create()
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
 
             return View("Create");
         }
 
         public IActionResult Genre()
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
+            var genres = _context.Genres.ToList();
+            ViewBag.genres = genres;
 
             return View("Genre");
         }
@@ -108,20 +85,18 @@ namespace MPA_Jukebox_Playlist.Controllers
         }
 
 
-        public IActionResult Playlists()
+        public IActionResult Playlist()
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
+            string stringqry = $@"select [ID] from [Users] where [Username] = '{getUser()}'";
+            int id = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
 
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
+            //string stringquery = $@"select * from [Playlists] where [UserID] = {id}";
+            //DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
+            List<Playlists> playlists = _context.Playlists.Where(e => e.UserID == id).ToList();
+            ViewBag.playlists = playlists;
 
             return View("Playlists");
         }
@@ -130,20 +105,11 @@ namespace MPA_Jukebox_Playlist.Controllers
         [Route("Songs/{id}")]
         public IActionResult Songs(int id)
         {
-            ViewBag.GenreType = id;
+            ViewBag.user = getUser();
+            //string stringquery = $@"select * from Songs where GenreID = {GenreID}";
 
-            var sessionUser = HttpContext.Session.GetString("User");
+            //DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
 
             return View("Songs");
         }
@@ -151,19 +117,8 @@ namespace MPA_Jukebox_Playlist.Controllers
         public IActionResult SelectPlaylist()
         {
 
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-                return View("Login");
-            }
 
             return View("SelectPlaylist");
         }
@@ -172,18 +127,8 @@ namespace MPA_Jukebox_Playlist.Controllers
 
         public IActionResult PlaylistName()
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
 
             return View("PlaylistName");
         }
@@ -191,18 +136,8 @@ namespace MPA_Jukebox_Playlist.Controllers
 
         public IActionResult Queue()
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
-
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
             var queuelist = HttpContext.Session.GetString("queue");
 
             if (queuelist != null)
@@ -228,18 +163,11 @@ namespace MPA_Jukebox_Playlist.Controllers
         [Route("GoToGenre/{id}")]
         public IActionResult GoToGenre(int id)
         {
-            var sessionUser = HttpContext.Session.GetString("User");
+            ViewBag.user = getUser();
 
-            if (sessionUser != null)
-            {
-                var user = JsonConvert.DeserializeObject(sessionUser);
+            List<Songs> songs = _context.Songs.Where(e => e.GenreID == id).ToList();
 
-                ViewBag.user = user;
-            }
-            else
-            {
-                ViewBag.user = "";
-            }
+            ViewBag.songs = songs;
 
             ViewBag.GenreType = id;
 

@@ -1,12 +1,9 @@
 ﻿@using System.Data
+@using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database;
 @{
     var songid = ViewBag.AddToPlaylistID;
     var username = ViewBag.user;
-    string stringqry = $@"select [ID] from Users where [Username] = '{username}'";
-    int userid = Int32.Parse(MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
-
-    string stringquery = $@"Select [Title] from [Playlists] where [UserID] = {userid}";
-    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+    List<Playlists> playlists = ViewBag.playlists;
 
 }
 
@@ -17,9 +14,9 @@
     <fieldset>
 
         <select id="orderby" name="txtTitle">
-        @foreach (DataRow dr in dt.Rows)
+        @foreach (var item in playlists)
         {
-            <option value="@dr["Title"]">@dr["Title"]</option>
+            <option value="@item.Title">@item.Title</option>
         }
         </select>
         <td colspan="2"><input type="submit" value="Add To Playlist" /></td>

@@ -1,17 +1,21 @@
 ﻿@using System.Data
+@using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database;
 @{
-    string stringquery = $@"select * from Genres";
-    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+    //string stringquery = $@"select * from Genres";
+    //DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
+   List<Genres> genres = ViewBag.genres;
+
 }
 
 <div>
     <a asp-area="" asp-controller="Home" asp-action="Index">Back</a>
 
-    @foreach(DataRow dr in dt.Rows)
+    @foreach(var genre in genres)
     {
         <div id="GenreDiv">
-            <h2>@dr["Type"]</h2>
-            <a asp-area="" asp-controller="Home" asp-action="GoToGenre" asp-route-id="@dr["ID"]">Songs</a>
+            <h2>@genre.Type</h2>
+            <a asp-area="" asp-controller="Home" asp-action="GoToGenre" asp-route-id="@genre.ID">Songs</a>
 
         </div>
     }

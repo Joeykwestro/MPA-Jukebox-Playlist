@@ -2,14 +2,9 @@
 
 @{
 
-    int id = ViewBag.PlaylistID;
+    DataTable dt = ViewBag.PlaylistSongs;
 
-    string stringquery = $@"select [Saved_Songs].[ID], [PlaylistID], [Songs].[Title], [Songs].[Artist], [Songs].[Duration], [Genres].[Type] from [Playlists] 
-inner join [Saved_Songs] on [Playlists].[ID] = [Saved_Songs].[PlaylistID] 
-inner join [Songs] on [Saved_Songs].[SongID] = [Songs].[ID]
-inner join [Genres] on [Songs].[GenreID] = [Genres].[ID]
-where [Playlists].[ID] = {id}";
-    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+
     int cnt = 0;
     foreach (DataRow dr in dt.Rows)
     {

@@ -9,7 +9,7 @@ namespace MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models
         {
             DataTable dt = new DataTable();
 
-            string conFms = "Data Source = DESKTOP-9U8RPTR; Initial Catalog = " + db + "; Integrated Security = True";
+            string conFms = "Data Source = LAPTOP-HGAMMLG8; Initial Catalog = " + db + "; Integrated Security = True";
 
             SqlConnection conFMs = new SqlConnection(conFms);
             SqlCommand commandFms = new SqlCommand(query, conFMs);
@@ -25,7 +25,7 @@ namespace MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models
         {
             string returnValue = "";
 
-            string conFms = "Data Source = DESKTOP-9U8RPTR; Initial Catalog = " + db + "; Integrated Security = True";
+            string conFms = "Data Source = LAPTOP-HGAMMLG8; Initial Catalog = " + db + "; Integrated Security = True";
 
             SqlConnection conFMs = new SqlConnection(conFms);
             SqlCommand commandFms = new SqlCommand(query, conFMs);

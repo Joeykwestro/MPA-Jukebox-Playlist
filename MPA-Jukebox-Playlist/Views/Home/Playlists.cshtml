@@ -1,12 +1,9 @@
 ﻿@using System.Data;
+@using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database;
 @{
     string user = ViewBag.User;
+    List<Playlists> playlists = ViewBag.playlists;
 
-    string stringqry = $@"select [ID] from [Users] where [Username] = '{user}'";
-    var id = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT");
-
-    string stringquery = $@"select * from [Playlists] where [UserID] = {id}";
-    DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
 
 }
 
@@ -14,12 +11,12 @@
     <a asp-area="" asp-controller="Home" asp-action="Index">Back</a><br />
     <a asp-area="" asp-controller="Playlist" asp-action="AddPlaylist">Add Playlist</a><br/>
 
-    @foreach (DataRow dr in dt.Rows)
+    @foreach (var item in playlists)
     {
         <div style="padding: 20px;margin: 0 auto; display: inline-block; border: 1px; border-style: solid;">
-            <h1>@dr["Title"]</h1>
-            <a asp-area="" asp-controller="Playlist" asp-action="PlaylistSongs" asp-route-id="@dr["ID"]">View</a>
-            <a asp-area="" asp-controller="Playlist" asp-action="DeletePlaylist" asp-route-id="@dr["ID"]">Delete</a>
+            <h1>@item.Title</h1>
+            <a asp-area="" asp-controller="Playlist" asp-action="PlaylistSongs" asp-route-id="@item.ID">View</a>
+            <a asp-area="" asp-controller="Playlist" asp-action="DeletePlaylist" asp-route-id="@item.ID">Delete</a>
 
         </div>
     }
