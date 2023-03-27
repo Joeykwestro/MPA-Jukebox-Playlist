@@ -1,14 +1,15 @@
 ﻿@using System.Data;
-
+@using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database;
 @{
 
-    DataTable dt = ViewBag.PlaylistSongs;
+    List<Songs> songs = ViewBag.Songs;
+;
 
 
     int cnt = 0;
-    foreach (DataRow dr in dt.Rows)
+    foreach (var item in songs)
     {
-        int cntr = (int)dr["Duration"];
+        int cntr = (int)item.Duration;
 
         cnt = cnt + cntr;
 
@@ -20,14 +21,13 @@
         <a asp-area="" asp-controller="Home" asp-action="Playlists">Back</a><br />
 
         <p>Total Duration: @cnt min</p><br />
-    @foreach (DataRow dr in dt.Rows)
+    @foreach (var item in songs)
     {
         <div style="padding: 20px;margin: 0 auto; display: inline-block; border: 1px; border-style: solid;">
-            <h1>@dr["Title"]</h1>
-            <p>Artist: @dr["Artist"]</p>
-            <p>@dr["Duration"] min</p>
-            <p>Genre: @dr["Type"]</p>
-            <a asp-area="" asp-controller="Playlist" asp-action="DeleteSongPlaylist" asp-route-id="@dr["ID"]">Delete</a>
+            <h1>@item.Title</h1>
+            <p>Artist: @item.Artist</p>
+            <p>@item.Duration min</p>
+            <a asp-area="" asp-controller="Playlist" asp-action="DeleteSongPlaylist" asp-route-id="@item.ID">Delete</a>
         </div>
     } 
 </div>

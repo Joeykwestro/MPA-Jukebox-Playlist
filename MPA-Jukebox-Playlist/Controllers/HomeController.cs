@@ -89,13 +89,15 @@ namespace MPA_Jukebox_Playlist.Controllers
         {
             ViewBag.user = getUser();
 
-            string stringqry = $@"select [ID] from [Users] where [Username] = '{getUser()}'";
-            int id = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+            //string stringqry = $@"select [ID] from [Users] where [Username] = '{getUser()}'";
+            //int id = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+            List<Users> user = new List<Users>();
+            user = _context.Users.Where(e => e.Username == getUser()).ToList();
 
             //string stringquery = $@"select * from [Playlists] where [UserID] = {id}";
             //DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
 
-            List<Playlists> playlists = _context.Playlists.Where(e => e.UserID == id).ToList();
+            List<Playlists> playlists = _context.Playlists.Where(e => e.UserID == user[0].ID).ToList();
             ViewBag.playlists = playlists;
 
             return View("Playlists");

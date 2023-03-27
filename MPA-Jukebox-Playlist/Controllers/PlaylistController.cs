@@ -58,13 +58,17 @@ namespace MPA_Jukebox_Playlist.Controllers
                 return View("../Home/Login");
             }
 
-            string stringqry = $@"select [ID] from Users where [Username] = '{usr}'";
-            int userid = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+            //string stringqry = $@"select [ID] from Users where [Username] = '{usr}'";
+            //int userid = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+
+            List<Users> usrid = new List<Users>();
+
+            usrid = _context.Users.Where(e => e.Username == usr).ToList();
 
             //string stringquery = $@"Select [Title] from [Playlists] where [UserID] = {userid}";
             //DataTable dt = MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
 
-            List<Playlists> playlists = _context.Playlists.Where(e => e.UserID == userid).ToList();
+            List<Playlists> playlists = _context.Playlists.Where(e => e.UserID == usrid[0].ID).ToList();
 
             ViewBag.playlists = playlists;
             return View("../Home/SelectPlaylist");
@@ -79,10 +83,13 @@ namespace MPA_Jukebox_Playlist.Controllers
 
             ViewBag.detailsID = id;
 
-            string stringquery = $@"select * from Songs inner join Genres on Songs.GenreID = Genres.ID where Songs.ID = {id}";
-            DataTable dt = SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+            //string stringquery = $@"select * from Songs inner join Genres on Songs.GenreID = Genres.ID where Songs.ID = {id}";
+            //DataTable dt = SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
 
-            ViewBag.details = dt;
+            List<Songs> songs = new List<Songs>();
+            songs = _context.Songs.Where(e => e.ID == id).ToList();
+
+            ViewBag.details = songs;
 
             return View("../Home/songDetails");
         }
@@ -101,12 +108,20 @@ namespace MPA_Jukebox_Playlist.Controllers
         [Route("DeleteSongPlaylist/{id}")]
         public IActionResult DeleteSongPlaylist(int id)
         {
-            string stringqry = $@"select PlaylistID from Saved_Songs where id = {id}";
-            int id2 = Int32.Parse(MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+            //string stringqry = $@"select PlaylistID from Saved_Songs where id = {id}";
+            //int id2 = Int32.Parse(MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
 
+            List<Saved_Songs> savedsongs = new List<Saved_Songs>();
 
-            string stringquery = $@"delete from [Saved_Songs] where ID = {id}";
-            MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "DELETE");
+            savedsongs = _context.Saved_Songs.Where(e => e.ID == id).ToList();
+
+            int? id2 = savedsongs[0].PlaylistID;
+
+            //string stringquery = $@"delete from [Saved_Songs] where ID = {id}";
+            //MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "DELETE");
+
+            _context.Remove(_context.Saved_Songs.Where(e => e.ID == id));
+
 
             ViewBag.PlaylistID = id2;
 
@@ -132,16 +147,15 @@ namespace MPA_Jukebox_Playlist.Controllers
             {
                 ViewBag.user = "";
             }
+            List<Saved_Songs> savedsongs = new List<Saved_Songs>();
+            savedsongs = _context.Saved_Songs.Where(s => s.PlaylistID == id).ToList();
+            //var songsid = _context.Saved_Songs.Where(e => e.PlaylistID == id);
+            
 
-            string stringquery = $@"select [Saved_Songs].[ID], [PlaylistID], [Songs].[Title], [Songs].[Artist], [Songs].[Duration], [Genres].[Type] from [Playlists] 
-inner join [Saved_Songs] on [Playlists].[ID] = [Saved_Songs].[PlaylistID] 
-inner join [Songs] on [Saved_Songs].[SongID] = [Songs].[ID]
-inner join [Genres] on [Songs].[GenreID] = [Genres].[ID]
-where [Playlists].[ID] = {id}";
-            DataTable dt = SqlFunctions.executeSqlGetDataTable(stringquery, "MPA_Jukebox_Playlist");
+            List<Songs> songs = new List<Songs>();
+            songs = _context.Songs.Where(e => e.ID == savedsongs[0].SongID).ToList();
 
-            ViewBag.PlaylistSongs = dt;
-
+            ViewBag.Songs = songs;
             return View("../Home/PlaylistSongs");
 
         }
@@ -150,8 +164,10 @@ where [Playlists].[ID] = {id}";
         public IActionResult DeletePlaylist(int id)
         {
 
-            string stringquery = $@"delete from [Playlists] where ID = {id}";
-            MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "DELETE");
+            //string stringquery = $@"delete from [Playlists] where ID = {id}";
+            //MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "DELETE");
+
+            _context.Remove(_context.Playlists.Where(e => e.ID == id));
 
             ViewBag.user = getUser();
 
@@ -182,24 +198,29 @@ where [Playlists].[ID] = {id}";
                     queue = JsonConvert.DeserializeObject<List<Song>>(queuelist);
                     try
                     {
-                        string stringquery = $@"select [ID] from Users where Username = '{user}'";
-                        int userid = Int32.Parse(SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
+                        //string stringquery = $@"select [ID] from Users where Username = '{user}'";
+                        //int userid = Int32.Parse(SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
+                        List<Users> usr = new List<Users>();
+                        usr = _context.Users.Where(e => e.Username == user).ToList();
 
                         Playlists playlist = new Playlists();
                         playlist.Title = txtAddPlaylist;
-                        playlist.UserID = userid;
+                        playlist.UserID = usr[0].ID;
                         _context.Playlists.Add(playlist);
                         _context.SaveChanges();
 
-                        string stringqry = $@"use MPA_Jukebox_Playlist; select [ID] from [Playlists] where [Title] = '{txtAddPlaylist}'";
-                        int playlistid = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+                        //string stringqry = $@"use MPA_Jukebox_Playlist; select [ID] from [Playlists] where [Title] = '{txtAddPlaylist}'";
+                        //int playlistid = Int32.Parse(SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "SELECT"));
+                        List<Playlists> playlists = new List<Playlists>();
+                        playlists = _context.Playlists.Where(e => e.Title == txtAddPlaylist).ToList();
+
 
                         foreach (var song in queue)
                         {
 
                             Saved_Songs SavedSongs = new Saved_Songs();
                             SavedSongs.SongID = song.ID;
-                            SavedSongs.PlaylistID = playlistid;
+                            SavedSongs.PlaylistID = playlists[0].ID;
 
                             _context.Saved_Songs.Add(SavedSongs);
 
@@ -228,12 +249,15 @@ where [Playlists].[ID] = {id}";
         public ActionResult form4(string txtTitle, int txtSongID)
         {
 
-            string stringquery = $@"select ID from Playlists where Title = '{txtTitle}'";
-            int id = Int32.Parse(SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
+            //string stringquery = $@"select ID from Playlists where Title = '{txtTitle}'";
+            //int id = Int32.Parse(SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
+
+            List<Playlists> playlist = new List<Playlists>();
+            playlist = _context.Playlists.Where(e => e.Title == txtTitle).ToList();
 
             Saved_Songs Songs = new Saved_Songs();
             Songs.SongID = txtSongID;
-            Songs.PlaylistID = id;
+            Songs.PlaylistID = playlist[0].ID;
             _context.Saved_Songs.Add(Songs);
             _context.SaveChanges();
             return View("../Home/Index");
@@ -247,8 +271,11 @@ where [Playlists].[ID] = {id}";
             
             if (txtAddPlaylist != null)
             {
-                string stringquery = $@"select [ID] from [Users] where [Username] = '{user}'";
-                int userid = Int32.Parse(MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
+                //string stringquery = $@"select [ID] from [Users] where [Username] = '{user}'";
+                //int userid = Int32.Parse(MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringquery, "MPA_Jukebox_Playlist", "SELECT"));
+
+                List<Users> usr = new List<Users>();
+                usr = _context.Users.Where(e => e.Username == user).ToList();
 
                 //string stringqry = $@"insert into [Playlists] ([UserID], [Title]) values ({userid}, '{txtAddPlaylist}')";
                 //MPA_Jukebox_Playlist.Models.SqlFunctions.executeSql(stringqry, "MPA_Jukebox_Playlist", "INSERT");
@@ -256,7 +283,7 @@ where [Playlists].[ID] = {id}";
                 Playlists playlists = new Playlists();
                
                 playlists.Title = txtAddPlaylist;
-                playlists.UserID = userid;
+                playlists.UserID = usr[0].ID;
                 
                 _context.Playlists.Add(playlists);
                 _context.SaveChanges();

@@ -1,20 +1,20 @@
 ﻿@using System.Data;
+@using MPA_Jukebox_Playlist.MPA_Jukebox_Playlist.Models.Database;
 
 @{
 
     int id = ViewBag.detailsID;
 
-    DataTable dt = ViewBag.details;
+    List<Songs> songs = ViewBag.details;
 
 }
 
-@foreach (DataRow dr in dt.Rows)
+@foreach (var songs1 in songs)
 {
-<a asp-area="" asp-controller="Home" asp-action="Songs" asp-route-id="@dr["GenreID"]">Back</a>
+<a asp-area="" asp-controller="Home" asp-action="Songs" asp-route-id="@songs1.ID">Back</a>
 <div id="SongDetailsContainer">
-    <h2>@dr["Title"]</h2>
-    <p>Artist: @dr["Artist"]</p>
-    <p>Genre: @dr["Type"]</p>
-    <p>Duration: @dr["Duration"] min</p>
+    <h2>@songs1.Title</h2>
+    <p>Artist: @songs1.Artist</p>
+    <p>Duration: @songs1.Duration min</p>
 </div>
 }
